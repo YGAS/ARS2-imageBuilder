@@ -36,8 +36,12 @@ env:
     run: |
         wegt https://firmware.koolshare.cn/binary/ars2/openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64.tar.xz
         tar -xf openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64.tar.xz
-        
-    - name: make image
+    - name: Make image
     run: |
       cd openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64
       make image PROFILE=ars2
+    - name: Upload bin directory
+      uses: actions/upload-artifact@main
+      with:
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64/bin
