@@ -36,10 +36,19 @@ jobs:
       run: |
         wget https://firmware.koolshare.cn/binary/ars2/openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64.tar.xz
         tar -xf openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64.tar.xz
+    
     - name: Make image
+      if: env.packages == ''
       run: |
         cd openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64
         make image PROFILE=ars2
+
+    - name: Make image with packages
+      if: env.packages != ''
+      run: |
+        cd openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64
+        make image PROFILE=ars2 PACKAGES="$CONFIG_FILE"
+        
     - name: Upload bin directory
       uses: actions/upload-artifact@main
       with:
