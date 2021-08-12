@@ -1,0 +1,43 @@
+name: Build ARS2
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: '直接嵌入映像中的包'
+        required: false
+        default: ''
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: .config
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: false
+  TZ: Asia/Shanghai
+  
+  jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - name: Installation depends
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint
+    - name: Clone source code
+    run: |
+        wegt https://firmware.koolshare.cn/binary/ars2/openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64.tar.xz
+        tar -xf openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64.tar.xz
+        
+    - name: make image
+    run: |
+      cd openwrt-imagebuilder-19.07.7-realtek-rtd129x.Linux-x86_64
+      make image PROFILE=ars2
