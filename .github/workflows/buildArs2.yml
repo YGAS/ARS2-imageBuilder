@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       packages:
-        description: '直接嵌入映像中的包'
+        description: 'PACKAGES'
         required: false
         default: ''
 
